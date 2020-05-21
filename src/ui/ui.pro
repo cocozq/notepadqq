@@ -6,10 +6,11 @@
 
 QT       += core gui svg widgets printsupport network webenginewidgets webchannel websockets dbus
 CONFIG += c++14 link_pkgconfig
-PKGCONFIG += uchardet
+!win32:PKGCONFIG += uchardet
 
 !macx: TARGET = notepadqq-bin
 macx: TARGET = notepadqq
+win32: TARGET = notepadqq
 
 TEMPLATE = app
 
@@ -18,7 +19,7 @@ UI_DIR = ../../out/build_data
 MOC_DIR = ../../out/build_data
 OBJECTS_DIR = ../../out/build_data
 
-QMAKE_CXXFLAGS_WARN_ON += -Wold-style-cast
+#QMAKE_CXXFLAGS_WARN_ON += -Wold-style-cast
 
 # clear "rpath" so that we can override Qt lib path via LD_LIBRARY_PATH
 !macx: QMAKE_RPATH=
@@ -34,18 +35,24 @@ isEmpty(DESTDIR) {
         message(Debug build)
         !macx: DESTDIR = ../../out/debug/lib
         macx: DESTDIR = ../../out/debug
+        win32: DESTDIR = ../../out/debug
     }
     CONFIG(release, debug|release) {
         message(Release build)
         !macx: DESTDIR = ../../out/release/lib
         macx: DESTDIR = ../../out/release
+        win32: DESTDIR = ../../out/release
     }
 }
+
+message('test')
+message($$DESTDIR)
 
 isEmpty(LRELEASE) {
     !macx:!haiku: LRELEASE = qtchooser -run-tool=lrelease -qt=5
     haiku: LRELEASE = lrelease
     macx: LRELEASE = lrelease
+    win32: LRELEASE = D:\DevTools\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin\lrelease.exe
 }
 
 !macx {
@@ -54,6 +61,9 @@ isEmpty(LRELEASE) {
 }
 macx {
     APPDATADIR = "$$DESTDIR/$${TARGET}.app/Contents/Resources"
+}
+win32 {
+    APPDATADIR = "./"
 }
 
 INSTALLFILESDIR = ../../support_files
@@ -160,6 +170,8 @@ HEADERS  += include/mainwindow.h \
     include/Sessions/backupservice.h \
     include/svgiconengine.h
 
+win32: HEADERS += include/uchardet.h
+
 FORMS    += mainwindow.ui \
     frmabout.ui \
     frmpreferences.ui \
@@ -229,8 +241,42 @@ extensionToolsTarget.commands = (cd \"$$PWD\" && \
 translationsTarget.target = make_translations
 translationsTarget.commands = ($${LRELEASE} \"$${CURRFILE}\")
 
-QMAKE_EXTRA_TARGETS += editorTarget extensionToolsTarget translationsTarget
-PRE_TARGETDEPS += make_editor make_extensionTools make_translations
+unix: {
+    QMAKE_EXTRA_TARGETS += editorTarget extensionToolsTarget
+    PRE_TARGETDEPS += make_editor make_extensionTools
+}
+
+QMAKE_EXTRA_TARGETS += translationsTarget
+PRE_TARGETDEPS += make_translations
+
+# win32 uchardet
+win32:contains(QMAKE_HOST.arch, x86_64) {
+    CONFIG(debug, debug|release) {
+        win32: LIBS += -L$$PWD/../../libs/x64/debug/ -luchardet
+        win32: win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/x64/debug/libuchardet.a
+    } else {
+        win32: LIBS += -L$$PWD/../../libs/x64/release/ -luchardet
+        win32: win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/x64/release/libuchardet.a
+    }
+} else {
+    CONFIG(debug, debug|release) {
+        win32: LIBS += -L$$PWD/../../libs/x86/ -luchardet
+        win32: win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/x86/debug/libuchardet.a
+    } else {
+        win32: LIBS += -L$$PWD/../../libs/x86/ -luchardet
+        win32: win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/x86/release/libuchardet.a
+    }
+}
+
+
+
+win32: {
+    RC_ICONS = $$PWD/../../images/notepadqq.ico
+
+    misc_data.path = "$$APPDATADIR"
+    misc_data.files += "$$APPDATADIR/editor"
+    misc_data.files += "$$APPDATADIR/extension_tools"
+}
 
 unix:!macx {
     launchTarget.target = make_launch

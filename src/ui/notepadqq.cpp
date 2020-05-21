@@ -23,6 +23,11 @@ QString Notepadqq::appDataPath(QString fileName)
 #ifdef Q_OS_MACX
     QString def = QString("%1/../Resources/").
             arg(qApp->applicationDirPath());
+#endif
+
+#ifdef Q_OS_WIN
+    QString def = QString("%1/").
+            arg(qApp->applicationDirPath());
 #else
     QString def = QString("%1/../appdata/").
             arg(qApp->applicationDirPath());
