@@ -48,14 +48,20 @@ namespace EditorNS
         query.addQueryItem("themePath", theme.path);
         query.addQueryItem("themeName", theme.name);
 
+#ifdef Q_OS_WIN
+        QUrl url = QUrl("file:///" + Notepadqq::editorPath());
+        url.setQuery(query);
+#else
         QUrl url = QUrl("file://" + Notepadqq::editorPath());
         url.setQuery(query);
+#endif
 
         QWebChannel * channel = new QWebChannel(this);
         m_webView->page()->setWebChannel(channel);
         channel->registerObject(QStringLiteral("cpp_ui_driver"), m_jsToCppProxy);
 
         m_webView->page()->setBackgroundColor(qApp->palette().color(QPalette::Background));
+        qDebug() << url << endl;
         m_webView->setUrl(url);
 
         // To load the page in the background (http://stackoverflow.com/a/10520029):

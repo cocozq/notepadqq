@@ -1462,7 +1462,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::on_actionExit_triggered()
 {
+    qDebug("on_actionExit_triggered");
     close();
+    qDebug("on_actionExit_triggered");
 }
 
 void MainWindow::instantiateFrmSearchReplace()

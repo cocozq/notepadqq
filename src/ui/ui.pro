@@ -19,7 +19,7 @@ UI_DIR = ../../out/build_data
 MOC_DIR = ../../out/build_data
 OBJECTS_DIR = ../../out/build_data
 
-#QMAKE_CXXFLAGS_WARN_ON += -Wold-style-cast
+!win32: QMAKE_CXXFLAGS_WARN_ON += -Wold-style-cast
 
 # clear "rpath" so that we can override Qt lib path via LD_LIBRARY_PATH
 !macx: QMAKE_RPATH=
@@ -246,6 +246,9 @@ unix: {
     PRE_TARGETDEPS += make_editor make_extensionTools
 }
 
+win32: CONFIG(release, debug|release): QMAKE_LFLAGS += /NODEFAULTLIB:MSVCRTD
+#win32: CONFIG(release, debug|release): LIBS += -L$$PWD/../LIBRARYNAME/Lib/ -lLIBRARY /NODEFAULTLIB:library
+
 QMAKE_EXTRA_TARGETS += translationsTarget
 PRE_TARGETDEPS += make_translations
 
@@ -267,8 +270,6 @@ win32:contains(QMAKE_HOST.arch, x86_64) {
         win32: win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/x86/release/libuchardet.a
     }
 }
-
-
 
 win32: {
     RC_ICONS = $$PWD/../../images/notepadqq.ico

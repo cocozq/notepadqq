@@ -136,6 +136,7 @@ int main(int argc, char *argv[])
     a.startServer();
 
     QFileInfo finfo(Notepadqq::editorPath());
+    qDebug() << Notepadqq::editorPath() << endl;
     if (!finfo.isReadable()) {
         qCritical() << "Can't open file: " + finfo.filePath();
         return EXIT_FAILURE;
