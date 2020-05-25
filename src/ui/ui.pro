@@ -52,7 +52,7 @@ isEmpty(LRELEASE) {
     !macx:!haiku: LRELEASE = qtchooser -run-tool=lrelease -qt=5
     haiku: LRELEASE = lrelease
     macx: LRELEASE = lrelease
-    win32: LRELEASE = D:\DevTools\Qt\Qt5.14.2\5.14.2\msvc2017_64\bin\lrelease.exe
+    win32: LRELEASE = lrelease
 }
 
 !macx {
