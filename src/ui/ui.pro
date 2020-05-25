@@ -292,64 +292,65 @@ unix:!macx {
 
 ### INSTALL ###
 unix:!macx {
-    isEmpty(PREFIX) {
-        PREFIX = /usr/local
+    CONFIG(release, debug|release) {
+        isEmpty(PREFIX) {
+            PREFIX = /usr/local
+        }
+
+        target.path = "$$INSTALL_ROOT$$PREFIX/lib/notepadqq/"
+        target.files += "$$DESTDIR/$$TARGET"
+
+        icon_h16.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/16x16/apps/"
+        icon_h16.files += "$$INSTALLFILESDIR/icons/hicolor/16x16/apps/notepadqq.png"
+        icon_h22.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/22x22/apps/"
+        icon_h22.files += "$$INSTALLFILESDIR/icons/hicolor/22x22/apps/notepadqq.png"
+        icon_h24.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/24x24/apps/"
+        icon_h24.files += "$$INSTALLFILESDIR/icons/hicolor/24x24/apps/notepadqq.png"
+        icon_h32.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/32x32/apps/"
+        icon_h32.files += "$$INSTALLFILESDIR/icons/hicolor/32x32/apps/notepadqq.png"
+        icon_h48.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/48x48/apps/"
+        icon_h48.files += "$$INSTALLFILESDIR/icons/hicolor/48x48/apps/notepadqq.png"
+        icon_h64.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/64x64/apps/"
+        icon_h64.files += "$$INSTALLFILESDIR/icons/hicolor/64x64/apps/notepadqq.png"
+        icon_h96.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/96x96/apps/"
+        icon_h96.files += "$$INSTALLFILESDIR/icons/hicolor/96x96/apps/notepadqq.png"
+        icon_h128.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/128x128/apps/"
+        icon_h128.files += "$$INSTALLFILESDIR/icons/hicolor/128x128/apps/notepadqq.png"
+        icon_h256.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/256x256/apps/"
+        icon_h256.files += "$$INSTALLFILESDIR/icons/hicolor/256x256/apps/notepadqq.png"
+        icon_h512.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/512x512/apps/"
+        icon_h512.files += "$$INSTALLFILESDIR/icons/hicolor/512x512/apps/notepadqq.png"
+        icon_hscalable.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/scalable/apps/"
+        icon_hscalable.files += "$$INSTALLFILESDIR/icons/hicolor/scalable/apps/notepadqq.svg"
+
+        # Make sure that the folders exists, otherwise qmake won't create the misc_data install rule
+        system($${QMAKE_MKDIR} \"$$APPDATADIR/editor\")
+        system($${QMAKE_MKDIR} \"$$APPDATADIR/extension_tools\")
+
+        misc_data.path = "$$INSTALL_ROOT$$PREFIX/share/notepadqq/"
+        misc_data.files += "$$APPDATADIR/editor"
+        misc_data.files += "$$APPDATADIR/extension_tools"
+
+        launch.path = "$$INSTALL_ROOT$$PREFIX/bin/"
+        launch.files += "$$BINDIR/notepadqq"
+        launch.CONFIG = no_check_exist     # Create the install rule even if the file doesn't exists when qmake is run
+
+        shortcuts.path = "$$INSTALL_ROOT$$PREFIX/share/applications/"
+        shortcuts.files += "$$INSTALLFILESDIR/shortcuts/notepadqq.desktop"
+
+        appstream.path = "$$INSTALL_ROOT$$PREFIX/share/metainfo/"
+        appstream.files += "$$INSTALLFILESDIR/notepadqq.appdata.xml"
+
+        # == Dummy target used to fix permissions at the end of the install ==
+        # A random path. Without one, qmake refuses to create the rule.
+        set_permissions.path = "$$INSTALL_ROOT$$PREFIX/bin/"
+        # We want to keep $$INSTALL_ROOT as a variable in the makefile, so we use $(INSTALL_ROOT)
+        unix:set_permissions.extra = chmod 755 $(INSTALL_ROOT)\"$$PREFIX/bin/notepadqq\"
+
+        # MAKE INSTALL
+        INSTALLS += target \
+             icon_h16 icon_h22 icon_h24 icon_h32 icon_h48 icon_h64 icon_h96 icon_h128 icon_h256 icon_h512 icon_hscalable \
+             misc_data launch shortcuts appstream \
+             set_permissions
     }
-
-    target.path = "$$INSTALL_ROOT$$PREFIX/lib/notepadqq/"
-    target.files += "$$DESTDIR/$$TARGET"
-
-    icon_h16.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/16x16/apps/"
-    icon_h16.files += "$$INSTALLFILESDIR/icons/hicolor/16x16/apps/notepadqq.png"
-    icon_h22.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/22x22/apps/"
-    icon_h22.files += "$$INSTALLFILESDIR/icons/hicolor/22x22/apps/notepadqq.png"
-    icon_h24.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/24x24/apps/"
-    icon_h24.files += "$$INSTALLFILESDIR/icons/hicolor/24x24/apps/notepadqq.png"
-    icon_h32.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/32x32/apps/"
-    icon_h32.files += "$$INSTALLFILESDIR/icons/hicolor/32x32/apps/notepadqq.png"
-    icon_h48.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/48x48/apps/"
-    icon_h48.files += "$$INSTALLFILESDIR/icons/hicolor/48x48/apps/notepadqq.png"
-    icon_h64.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/64x64/apps/"
-    icon_h64.files += "$$INSTALLFILESDIR/icons/hicolor/64x64/apps/notepadqq.png"
-    icon_h96.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/96x96/apps/"
-    icon_h96.files += "$$INSTALLFILESDIR/icons/hicolor/96x96/apps/notepadqq.png"
-    icon_h128.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/128x128/apps/"
-    icon_h128.files += "$$INSTALLFILESDIR/icons/hicolor/128x128/apps/notepadqq.png"
-    icon_h256.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/256x256/apps/"
-    icon_h256.files += "$$INSTALLFILESDIR/icons/hicolor/256x256/apps/notepadqq.png"
-    icon_h512.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/512x512/apps/"
-    icon_h512.files += "$$INSTALLFILESDIR/icons/hicolor/512x512/apps/notepadqq.png"
-    icon_hscalable.path = "$$INSTALL_ROOT$$PREFIX/share/icons/hicolor/scalable/apps/"
-    icon_hscalable.files += "$$INSTALLFILESDIR/icons/hicolor/scalable/apps/notepadqq.svg"
-
-    # Make sure that the folders exists, otherwise qmake won't create the misc_data install rule
-    system($${QMAKE_MKDIR} \"$$APPDATADIR/editor\")
-    system($${QMAKE_MKDIR} \"$$APPDATADIR/extension_tools\")
-
-    misc_data.path = "$$INSTALL_ROOT$$PREFIX/share/notepadqq/"
-    misc_data.files += "$$APPDATADIR/editor"
-    misc_data.files += "$$APPDATADIR/extension_tools"
-
-    launch.path = "$$INSTALL_ROOT$$PREFIX/bin/"
-    launch.files += "$$BINDIR/notepadqq"
-    launch.CONFIG = no_check_exist     # Create the install rule even if the file doesn't exists when qmake is run
-
-    shortcuts.path = "$$INSTALL_ROOT$$PREFIX/share/applications/"
-    shortcuts.files += "$$INSTALLFILESDIR/shortcuts/notepadqq.desktop"
-    
-    appstream.path = "$$INSTALL_ROOT$$PREFIX/share/metainfo/"
-    appstream.files += "$$INSTALLFILESDIR/notepadqq.appdata.xml"
-
-    # == Dummy target used to fix permissions at the end of the install ==
-    # A random path. Without one, qmake refuses to create the rule.
-    set_permissions.path = "$$INSTALL_ROOT$$PREFIX/bin/"
-    # We want to keep $$INSTALL_ROOT as a variable in the makefile, so we use $(INSTALL_ROOT)
-    unix:set_permissions.extra = chmod 755 $(INSTALL_ROOT)\"$$PREFIX/bin/notepadqq\"
-
-    # MAKE INSTALL
-    INSTALLS += target \
-         icon_h16 icon_h22 icon_h24 icon_h32 icon_h48 icon_h64 icon_h96 icon_h128 icon_h256 icon_h512 icon_hscalable \
-         misc_data launch shortcuts appstream \
-         set_permissions
-
 }
