@@ -33,7 +33,7 @@ QString getLineBreak() {
 #ifdef WIN32
     return "\r\n";
 #else
-    return "\n"
+    return "\n";
 #endif
 }
 
