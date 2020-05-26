@@ -11,6 +11,8 @@ void println(QString string);
 void printerr(QString string);
 void printerrln(QString string);
 
+QString getLineBreak();
+
 
 namespace PForResult {
     enum Enum {

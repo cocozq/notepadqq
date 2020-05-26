@@ -1,4 +1,5 @@
 #include "include/Extensions/extensionsserver.h"
+#include "include/globals.h"
 
 #include <QJsonDocument>
 #include <QLocalSocket>
@@ -76,7 +77,7 @@ namespace Extensions {
                         QJsonDocument(response).toJson(QJsonDocument::Compact))
                     .trimmed();
 
-            stream << jsonResponse << "\n";
+            stream << jsonResponse << getLineBreak();
         }
     }
 
@@ -96,7 +97,7 @@ namespace Extensions {
         for (QLocalSocket *socket : m_sockets) {
             if (socket->isOpen()) {
                 QTextStream stream(socket);
-                stream << jsonMessage << "\n";
+                stream << jsonMessage << getLineBreak();
             }
         }
     }
@@ -109,7 +110,7 @@ namespace Extensions {
                     .trimmed();
 
             QTextStream stream(socket);
-            stream << jsonMessage << "\n";
+            stream << jsonMessage << getLineBreak();
         }
     }
 

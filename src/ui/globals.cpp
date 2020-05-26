@@ -29,6 +29,14 @@ void printerrln(QString string)
     printerr(string + "\n");
 }
 
+QString getLineBreak() {
+#ifdef WIN32
+    return "\r\n";
+#else
+    return "\n"
+#endif
+}
+
 QPromise<PForResult::Enum> pFor(int start, int end, std::function<QPromise<PForResult::Enum>(int, QPromise<PForResult::Enum>, QPromise<PForResult::Enum>)> iteration) {
     QPromise<PForResult::Enum> p = QPromise<PForResult::Enum>::resolve(PForResult::Continue);
 
