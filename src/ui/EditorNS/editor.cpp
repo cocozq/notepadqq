@@ -246,7 +246,7 @@ namespace EditorNS
         });
         promise.wait();
         return result;
-#elif
+#endif
     }
 
     QPromise<void> Editor::markClean()
