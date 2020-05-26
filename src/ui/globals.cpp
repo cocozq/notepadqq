@@ -30,7 +30,7 @@ void printerrln(QString string)
 }
 
 QString getLineBreak() {
-#ifdef WIN32
+#ifdef Q_OS_WIN32
     return "\r\n";
 #else
     return "\n";

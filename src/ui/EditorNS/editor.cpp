@@ -236,8 +236,17 @@ namespace EditorNS
 
     bool Editor::isClean()
     {
+#ifdef Q_OS_MAC
         QVariant data(0); // avoid crash on Mac OS X, see issue #702
         return asyncSendMessageWithResult("C_FUN_IS_CLEAN", data).get().toBool();
+#else
+        bool result = false;
+        QPromise<bool> promise = isCleanP().tap([&](bool res) {
+           result = res;
+        });
+        promise.wait();
+        return result;
+#elif
     }
 
     QPromise<void> Editor::markClean()
