@@ -16,10 +16,10 @@
 
 #include <algorithm>
 
-#ifdef Q_OS_WIN
-#include "include/uchardet.h"
-#else
+#ifdef Q_OS_LINUX
 #include <uchardet.h>
+#else
+#include "include/uchardet.h"
 #endif
 
 DocEngine::DocEngine(TopEditorContainer *topEditorContainer, QObject *parent) :

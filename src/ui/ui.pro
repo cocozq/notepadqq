@@ -6,7 +6,9 @@
 
 QT       += core gui svg widgets printsupport network webenginewidgets webchannel websockets dbus
 CONFIG += c++14 link_pkgconfig
-!win32:PKGCONFIG += uchardet
+unix:!macx {
+    PKGCONFIG += uchardet
+}
 
 !macx: TARGET = notepadqq-bin
 macx: TARGET = notepadqq
@@ -171,6 +173,7 @@ HEADERS  += include/mainwindow.h \
     include/svgiconengine.h
 
 win32: HEADERS += include/uchardet.h
+mac: HEADERS += include/uchardet.h
 
 FORMS    += mainwindow.ui \
     frmabout.ui \
@@ -270,6 +273,9 @@ win32:contains(QMAKE_HOST.arch, x86_64) {
         win32: win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/x86/release/libuchardet.a
     }
 }
+
+macx: LIBS += -L$$PWD/../../../uchardet/ -luchardet
+macx: PRE_TARGETDEPS += $$PWD/../../../uchardet/libuchardet.a
 
 win32: {
     RC_ICONS = $$PWD/../../images/notepadqq.ico
