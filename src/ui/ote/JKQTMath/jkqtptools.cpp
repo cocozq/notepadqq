@@ -42,6 +42,10 @@ IWR, University of Heidelberg
 
 #include <ctype.h>
 
+#ifdef Q_OS_WIN
+#define _USE_MATH_DEFINES
+#endif
+
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>

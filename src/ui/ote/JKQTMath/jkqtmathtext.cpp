@@ -19,6 +19,7 @@
 */
 
 #include "jkqtmathtext.h"
+#include "jkqtsymbl.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -28,6 +29,7 @@
 #include <typeinfo>
 //#define QColor2String(color) QString(jkqtp_rgbtostring((color).red(), (color).green(), (color).blue(),
 //(color).alpha()).c_str())
+
 
 QPainterPath makeHBracePath(
     double x, double ybrace, double width, double bw, double cubicshrink = 0.5, double cubiccontrolfac = 0.3)
@@ -2615,196 +2617,25 @@ JKQTmathText::MTsymbolNode::MTsymbolNode(JKQTmathText* parent, QString name, boo
             else {
                 // now we set the symbols from the Symbol font
                 font = MTSFsymbol;
-                if (n == "leftrightarrow")
-                    symbol = QChar(0xAB);
-                else if (n == "leftarrow")
-                    symbol = QChar(0xAC);
-                else if (n == "rightarrow" || n == "to")
-                    symbol = QChar(0xAE);
-                else if (n == "uparrow")
-                    symbol = QChar(0xAD);
-                else if (n == "downarrow")
-                    symbol = QChar(0xAF);
-                else if (n == "Leftrightarrow" || n == "iff")
-                    symbol = QChar(0xDB);
-                else if (n == "Leftarrow")
-                    symbol = QChar(0xDC);
-                else if (n == "Rightarrow")
-                    symbol = QChar(0xDE);
-                else if (n == "Uparrow")
-                    symbol = QChar(0xDD);
-                else if (n == "Downarrow")
-                    symbol = QChar(0xFF);
-                else if (n == "pm")
-                    symbol = QChar(0xB1);
-                else if (n == "leq")
-                    symbol = QChar(0xA3);
-                else if (n == "geq")
-                    symbol = QChar(0xB3);
-                else if (n == "times")
-                    symbol = QChar(0xB4);
-                else if (n == "propto")
-                    symbol = QChar(0xB5);
-                else if (n == "partial")
-                    symbol = QChar(0xB6);
-                else if (n == "bullet")
-                    symbol = QChar(0xB7);
-                else if (n == "neq" || n == "ne")
-                    symbol = QChar(0xB9);
-                else if (n == "equiv")
-                    symbol = QChar(0xBA);
-                else if (n == "approx")
-                    symbol = QChar(0xBB);
-                else if (n == "ellipsis")
-                    symbol = QChar(0xBC);
-                else if (n == "Im")
-                    symbol = QChar(0xC1);
-                else if (n == "Re")
-                    symbol = QChar(0xC2);
-                else if (n == "otimes")
-                    symbol = QChar(0xC4);
-                else if (n == "oplus")
-                    symbol = QChar(0xC5);
-                else if (n == "oslash")
-                    symbol = QChar(0xC6);
-                else if (n == "cap" || n == "land")
-                    symbol = QChar(0xC7);
-                else if (n == "cup" || n == "lor")
-                    symbol = QChar(0xC8);
-                else if (n == "supset")
-                    symbol = QChar(0xC9);
-                else if (n == "supseteq")
-                    symbol = QChar(0xCA);
-                else if (n == "supsetnot")
-                    symbol = QChar(0xCB);
-                else if (n == "subset")
-                    symbol = QChar(0xCC);
-                else if (n == "subseteq")
-                    symbol = QChar(0xCD);
-                else if (n == "in")
-                    symbol = QChar(0xCE);
-                else if (n == "notin")
-                    symbol = QChar(0xCF);
-                else if (n == "angle")
-                    symbol = QChar(0xD0);
-                else if (n == "nabla")
-                    symbol = QChar(0xD1);
-                else if (n == "copyright")
-                    symbol = QChar(0xD3);
-                else if (n == "registered")
-                    symbol = QChar(0xD2);
-                else if (n == "trademark")
-                    symbol = QChar(0xD4);
-                else if (n == "cdot")
-                    symbol = QChar(0xD7);
-                else if (n == "neg")
-                    symbol = QChar(0xD8);
-                else if (n == "wedge")
-                    symbol = QChar(0xD9);
-                else if (n == "vee")
-                    symbol = QChar(0xDA);
-                else if (n == "diamond")
-                    symbol = QChar(0xE0);
-                else if (n == "langle")
-                    symbol = QChar(0xE1);
-                else if (n == "rangle")
-                    symbol = QChar(0xF1);
-                else if (n == "int") {
-                    symbol = QChar(0xF2);
-                    fontFactor = mathFontFactor;
-                    yfactor = +0.1;
-                } else if (n == "forall") {
-                    symbol = QChar(0x22);
-                } else if (n == "exists") {
-                    symbol = QChar(0x24);
-                } else if (n == "cong") {
-                    symbol = QChar(0x40);
-                } else if (n == "bot") {
-                    symbol = QChar(0x5E);
+
+                if (JKQtMap::charWinMap.contains(n)) {
+                    symbol = JKQtMap::charWinMap.value(n);
+                }
+                else if (JKQtMap::strWinMap.contains(n)) {
+                    symbol = JKQtMap::strWinMap.value(n);
                 }
 
-                else if (n == "ll") {
-                    symbol = "<<";
-                } else if (n == "gg") {
-                    symbol = ">>";
-                } else if (n == "bbC") {
-                    symbol = "C";
+                if (n.startsWith("bb", Qt::CaseSensitive)) {
                     bold = +1;
                     italic = -1;
-                } else if (n == "bbH") {
-                    symbol = "H";
-                    bold = +1;
-                    italic = -1;
-                } else if (n == "bbN") {
-                    symbol = "N";
-                    bold = +1;
-                    italic = -1;
-                } else if (n == "bbP") {
-                    symbol = "P";
-                    bold = +1;
-                    italic = -1;
-                } else if (n == "bbQ") {
-                    symbol = "Q";
-                    bold = +1;
-                    italic = -1;
-                } else if (n == "bbR") {
-                    symbol = "R";
-                    bold = +1;
-                    italic = -1;
-                } else if (n == "bbZ") {
-                    symbol = "Z";
-                    bold = +1;
-                    italic = -1;
-                } else if (n == "Alef" || n == "alef")
-                    symbol = QChar(0xC0);
-                else if (n == "tilde")
-                    symbol = "~";
-                else if (n == "iint") {
-                    symbol = QString(2, QChar(0xF2));
+                }
+
+                if (n == "int" || n == "iint" || n == "iiint") {
                     fontFactor = mathFontFactor;
                     yfactor = +0.1;
                 } else if (n == "iiint") {
-                    symbol = QString(3, QChar(0xF2));
                     fontFactor = mathFontFactor;
                     yfactor = +0.1;
-                } else if (n == "emptyset")
-                    symbol = QChar(0xC6);
-                else if (n == "varnothing")
-                    symbol = QChar(0xC6);
-                else if (n == "lceil")
-                    symbol = QChar(0xE9);
-                else if (n == "rceil")
-                    symbol = QChar(0xF9);
-                else if (n == "lfloor")
-                    symbol = QChar(0xEB);
-                else if (n == "rfloor")
-                    symbol = QChar(0xFB);
-                else if (n == "subsetnot")
-                    symbol = QChar(0xCB);
-                else if (n == "DC")
-                    symbol = "=";
-                else if (n == "bot") {
-                    symbol = QChar(0x5E);
-                } else if (n == "cdots") {
-                    symbol = QString(3, QChar(0xD7));
-                } else if (n == "dots" || n == "ldots") {
-                    symbol = QChar(0xDC);
-                }
-
-                else if (n == "cent") {
-                    symbol = "c";
-                } else if (n == "bigcap") {
-                    symbol = QChar(0xC7);
-                    fontFactor = 2;
-                } else if (n == "bigcup") {
-                    symbol = QChar(0xC8);
-                    fontFactor = 2;
-                } else if (n == "bigvee") {
-                    symbol = QChar(0xDA);
-                    fontFactor = 2;
-                } else if (n == "bighat") {
-                    symbol = QChar(0xD9);
-                    fontFactor = 2;
                 }
 
                 else { // here are text mode symbols, i.e. bold and italic won't be touched
@@ -2994,321 +2825,32 @@ JKQTmathText::MTsymbolNode::MTsymbolNode(JKQTmathText* parent, QString name, boo
             else {
                 // now we set the symbols from the Symbol font
                 font = MTSFsymbol;
-                if (n == "leftrightarrow")
-                    symbol = QChar(0x2194);
-                else if (n == "leftarrow")
-                    symbol = QChar(0x2190);
-                else if (n == "rightarrow" || n == "to")
-                    symbol = QChar(0x2192);
-                else if (n == "uparrow")
-                    symbol = QChar(0x2191);
-                else if (n == "downarrow")
-                    symbol = QChar(0x2193);
-                else if (n == "updownarrow")
-                    symbol = QChar(0x2195);
-                else if (n == "Leftrightarrow" || n == "iff")
-                    symbol = QChar(0x21D4);
-                else if (n == "Leftarrow")
-                    symbol = QChar(0x21D0);
-                else if (n == "Rightarrow")
-                    symbol = QChar(0x21D2);
-                else if (n == "Uparrow")
-                    symbol = QChar(0x21D1);
-                else if (n == "Downarrow")
-                    symbol = QChar(0x21D3);
-                else if (n == "Updownarrow")
-                    symbol = QChar(0x21D5);
-                else if (n == "sum") {
-                    symbol = QChar(0x2211);
+                if (JKQtMap::charUniMap.contains(n)) {
+                    symbol = JKQtMap::charUniMap.value(n);
+                }
+
+                if (n == "sum" || n == "prod") {
                     heightIsAscent = true;
                     exactAscent = true;
                 } else if (n == "prod") {
-                    symbol = QChar(0x220F);
                     heightIsAscent = true;
                     exactAscent = true;
-                } else if (n == "pm")
-                    symbol = QChar(0x00B1);
-                else if (n == "mp")
-                    symbol = QChar(0x2213);
-                else if (n == "leq")
-                    symbol = QChar(0x2264);
-                else if (n == "geq")
-                    symbol = QChar(0x2265);
-
-                else if (n == "ll")
-                    symbol = QChar(0x226A);
-                else if (n == "gg")
-                    symbol = QChar(0x226B);
-                else if (n == "hbar")
-                    symbol = QChar(0x210F);
-                else if (n == "euro")
-                    symbol = QChar(0x20AC);
-                else if (n == "bbC") {
-                    symbol = QChar(0x2102);
+                } else if (n == "bbC" || n == "bbH" || n == "bbN" || n == "bbP"  || n == "bbQ"  || n == "bbR"  || n == "bbZ") {
                     italic = -1;
-                } else if (n == "bbH") {
-                    symbol = QChar(0x210D);
-                    italic = -1;
-                } else if (n == "bbN") {
-                    symbol = QChar(0x2115);
-                    italic = -1;
-                } else if (n == "bbP") {
-                    symbol = QChar(0x2119);
-                    italic = -1;
-                } else if (n == "bbQ") {
-                    symbol = QChar(0x211A);
-                    italic = -1;
-                } else if (n == "bbR") {
-                    symbol = QChar(0x211D);
-                    italic = -1;
-                } else if (n == "bbZ") {
-                    symbol = QChar(0x2124);
-                    italic = -1;
-                } else if (n == "Angstrom")
-                    symbol = QChar(0x212B);
-                else if (n == "Alef" || n == "alef")
-                    symbol = QChar(0x2135);
-                else if (n == "Bet" || n == "bet")
-                    symbol = QChar(0x2136);
-                else if (n == "Gimel" || n == "gimel")
-                    symbol = QChar(0x2137);
-                else if (n == "Dalet" || n == "dalet")
-                    symbol = QChar(0x2138);
-                else if (n == "nexists") {
-                    symbol = QChar(0x2204);
-                } else if (n == "ni")
-                    symbol = QChar(0x220B);
-                else if (n == "notni")
-                    symbol = QChar(0x220C);
-                else if (n == "circ")
-                    symbol = QChar(0x2218);
-                else if (n == "tilde")
-                    symbol = QChar(0x223C);
-                else if (n == "iint") {
-                    symbol = QChar(0x222C);
+                }
+                else if (n == "iint" || n == "iiint" || n == "oint" || n == "oiint" || n == "oiiint" || n == "int") {
                     fontFactor = mathFontFactor; /*yfactor=+0.1;;*/
                     heightIsAscent = true;
                     exactAscent = true;
-                } else if (n == "iiint") {
-                    symbol = QChar(0x222D);
-                    fontFactor = mathFontFactor; /*yfactor=+0.1;;*/
-                    heightIsAscent = true;
-                    exactAscent = true;
-                } else if (n == "oint") {
-                    symbol = QChar(0x222E);
-                    fontFactor = mathFontFactor; /*yfactor=+0.1;;*/
-                    heightIsAscent = true;
-                    exactAscent = true;
-                } else if (n == "oiint") {
-                    symbol = QChar(0x222F);
-                    fontFactor = mathFontFactor; /*yfactor=+0.1;;*/
-                    heightIsAscent = true;
-                    exactAscent = true;
-                } else if (n == "oiiint") {
-                    symbol = QChar(0x2230);
-                    fontFactor = mathFontFactor; /*yfactor=+0.1;;*/
-                    heightIsAscent = true;
-                    exactAscent = true;
-                } else if (n == "emptyset")
-                    symbol = QChar(0x2300);
-                else if (n == "varnothing")
-                    symbol = QChar(0x2300);
-                else if (n == "odot")
-                    symbol = QChar(0x2299);
-                else if (n == "ominus")
-                    symbol = QChar(0x2296);
-                else if (n == "lceil")
-                    symbol = QChar(0x2308);
-                else if (n == "rceil")
-                    symbol = QChar(0x2309);
-                else if (n == "lfloor")
-                    symbol = QChar(0x230A);
-                else if (n == "rfloor")
-                    symbol = QChar(0x230B);
-                else if (n == "subsetnot")
-                    symbol = QChar(0x2284);
-                else if (n == "DC")
-                    symbol = QChar(0x2393);
-                else if (n == "bot") {
-                    symbol = QChar(0x22A4);
                 } else if (n == "cdots") {
                     symbol = QString(QChar(0x00B7)) + QString(QChar(0x00B7)) + QString(QChar(0x00B7));
                 } // QChar(0x22EF); }
-                else if (n == "vdots") {
-                    symbol = QChar(0x22EE);
-                } else if (n == "iddots") {
-                    symbol = QChar(0x22F0);
-                } else if (n == "ddots") {
-                    symbol = QChar(0x22F1);
-                } else if (n == "dots" || n == "ldots") {
+                else if (n == "dots" || n == "ldots") {
                     symbol = "...";
-                } // QChar(0x2026); }
-                else if (n == "perthousand") {
-                    symbol = QChar(0x2030);
-                } else if (n == "leftharpoonup") {
-                    symbol = QChar(0x21BC);
-                } else if (n == "rightharpoonup") {
-                    symbol = QChar(0x21C0);
-                } else if (n == "upharpoonleft") {
-                    symbol = QChar(0x21BF);
-                } else if (n == "downharpoonleft") {
-                    symbol = QChar(0x21C3);
-                } else if (n == "leftrightharpoon") {
-                    symbol = QChar(0x21CB);
-                } else if (n == "rightleftharpoon") {
-                    symbol = QChar(0x21CC);
-                } else if (n == "coprod") {
-                    symbol = QChar(0x2210);
+                } else if (n == "coprod" || n == "bigcap" || n == "bigcup" || n == "bigvee" || n == "bighat") {
                     heightIsAscent = true;
                     exactAscent = true;
-                } else if (n == "leftharpoondown") {
-                    symbol = QChar(0x21BD);
-                } else if (n == "rightharpoondown") {
-                    symbol = QChar(0x21C1);
-                } else if (n == "upharpoonright") {
-                    symbol = QChar(0x21BE);
-                } else if (n == "downharpoonright") {
-                    symbol = QChar(0x21C2);
-                } else if (n == "nwarrow") {
-                    symbol = QChar(0x2196);
-                } else if (n == "nearrow") {
-                    symbol = QChar(0x2197);
-                } else if (n == "searrow") {
-                    symbol = QChar(0x2198);
-                } else if (n == "swarrow") {
-                    symbol = QChar(0x2199);
-                } else if (n == "mapsto") {
-                    symbol = QChar(0x21A6);
-                } else if (n == "cent") {
-                    symbol = QChar(0x00A2);
-                } else if (n == "pound") {
-                    symbol = QChar(0x00A3);
-                } else if (n == "yen") {
-                    symbol = QChar(0x00A5);
-                } else if (n == "div") {
-                    symbol = QChar(0x00F7);
-                } else if (n == "multimap") {
-                    symbol = QChar(0x22B8);
-                } else if (n == "maporiginal") {
-                    symbol = QChar(0x22B6);
-                } else if (n == "mapimage") {
-                    symbol = QChar(0x22B7);
-                } else if (n == "bigcap") {
-                    symbol = QChar(0x22C2);
-                    heightIsAscent = true;
-                    exactAscent = true;
-                    ;
-                    heightIsAscent = true;
-                    exactAscent = true;
-                } else if (n == "bigcup") {
-                    symbol = QChar(0x22C3);
-                    heightIsAscent = true;
-                    exactAscent = true;
-                    ;
-                    heightIsAscent = true;
-                    exactAscent = true;
-                } else if (n == "bigvee") {
-                    symbol = QChar(0x22C1);
-                    heightIsAscent = true;
-                    exactAscent = true;
-                    ;
-                    heightIsAscent = true;
-                    exactAscent = true;
-                } else if (n == "bighat") {
-                    symbol = QChar(0x22C0);
-                    heightIsAscent = true;
-                    exactAscent = true;
-                    ;
-                    heightIsAscent = true;
-                    exactAscent = true;
-                } else if (n == "benzene")
-                    symbol = QChar(0x232C);
-
-                else if (n == "times")
-                    symbol = QChar(0x2A2F);
-                else if (n == "propto")
-                    symbol = QChar(0x221D);
-                else if (n == "partial")
-                    symbol = QChar(0x2202);
-                else if (n == "bullet")
-                    symbol = QChar(0x2219);
-                else if (n == "neq" || n == "ne")
-                    symbol = QChar(0x2260);
-                else if (n == "equiv")
-                    symbol = QChar(0x2261);
-                else if (n == "approx")
-                    symbol = QChar(0x2245);
-                else if (n == "ellipsis")
-                    symbol = QChar(0x2026);
-                else if (n == "Im")
-                    symbol = QChar(0x2111);
-                else if (n == "Re")
-                    symbol = QChar(0x211C);
-                else if (n == "otimes")
-                    symbol = QChar(0x2297);
-                else if (n == "oplus")
-                    symbol = QChar(0x2295);
-                else if (n == "oslash")
-                    symbol = QChar(0x2298);
-                else if (n == "cap" || n == "land")
-                    symbol = QChar(0x2229);
-                else if (n == "cup" || n == "lor")
-                    symbol = QChar(0x222A);
-                else if (n == "supset")
-                    symbol = QChar(0x2283);
-                else if (n == "supseteq")
-                    symbol = QChar(0x2286);
-                else if (n == "supsetnot")
-                    symbol = QChar(0x2285);
-                else if (n == "subset")
-                    symbol = QChar(0x2282);
-                else if (n == "subseteq")
-                    symbol = QChar(0x2286);
-                else if (n == "in")
-                    symbol = QChar(0x2208);
-                else if (n == "notin")
-                    symbol = QChar(0x2209);
-                else if (n == "angle")
-                    symbol = QChar(0x2221);
-                else if (n == "nabla")
-                    symbol = QChar(0x2207);
-                else if (n == "copyright")
-                    symbol = QChar(0x00A9);
-                else if (n == "registered")
-                    symbol = QChar(0x00AE);
-                else if (n == "trademark")
-                    symbol = QChar(0x2122);
-                else if (n == "cdot")
-                    symbol = QChar(0x00B7);
-                else if (n == "neg")
-                    symbol = QChar(0x00AC);
-                else if (n == "wedge")
-                    symbol = QChar(0x2227);
-                else if (n == "vee")
-                    symbol = QChar(0x2228);
-                else if (n == "diamond")
-                    symbol = QChar(0xE0);
-                else if (n == "langle")
-                    symbol = QChar(0x2329);
-                else if (n == "rangle")
-                    symbol = QChar(0x232A);
-                else if (n == "int") {
-                    symbol = QChar(0x222B);
-                    fontFactor = mathFontFactor; /*yfactor=+0.1;;*/
-                    heightIsAscent = true;
-                    exactAscent = true;
-                } else if (n == "infty") {
-                    symbol = QChar(0x221E);
-                } else if (n == "forall") {
-                    symbol = QChar(0x2200);
-                } else if (n == "exists") {
-                    symbol = QChar(0x2203);
-                } else if (n == "cong") {
-                    symbol = QChar(0x2245);
-                } else if (n == "bot") {
-                    symbol = QChar(0x22A5);
                 }
-
                 else { // here are text mode symbols, i.e. bold and italic won't be touched
                     bold = -1;
                     italic = -1;
@@ -3413,256 +2955,28 @@ JKQTmathText::MTsymbolNode::MTsymbolNode(JKQTmathText* parent, QString name, boo
             // else if (n=="frqq") { symbol=""; }
             else {
                 font = MTSFgreek;
-                if (n == "alpha")
-                    symbol = QChar(0xAE);
-                else if (n == "beta")
-                    symbol = QChar(0xAF);
-                else if (n == "gamma")
-                    symbol = QChar(0xB0);
-                else if (n == "delta")
-                    symbol = QChar(0xB1);
-                else if (n == "epsilon")
-                    symbol = QChar(0x22);
-                else if (n == "varepsilon")
-                    symbol = QChar(0xB2);
-                else if (n == "zeta")
-                    symbol = QChar(0xB3);
-                else if (n == "eta")
-                    symbol = QChar(0xB4);
-                else if (n == "theta")
-                    symbol = QChar(0xB5);
-                else if (n == "vartheta")
-                    symbol = QChar(0x23);
-                else if (n == "iota")
-                    symbol = QChar(0xB6);
-                else if (n == "kappa")
-                    symbol = QChar(0xB7);
-                else if (n == "lambda")
-                    symbol = QChar(0xB8);
-                else if (n == "mu")
-                    symbol = QChar(0xB9);
-                else if (n == "nu")
-                    symbol = QChar(0xBA);
-                else if (n == "xi")
-                    symbol = QChar(0xBB);
-                else if (n == "pi")
-                    symbol = QChar(0xBC);
-                else if (n == "varpi")
-                    symbol = QChar(0x24);
-                else if (n == "rho")
-                    symbol = QChar(0xBD);
-                else if (n == "varrho")
-                    symbol = QChar(0x25);
-                else if (n == "sigma")
-                    symbol = QChar(0xBE);
-                else if (n == "varsigma")
-                    symbol = QChar(0x26);
-                else if (n == "tau")
-                    symbol = QChar(0xBF);
-                else if (n == "upsilon")
-                    symbol = QChar(0xC0);
-                else if (n == "phi")
-                    symbol = QChar(0xC1);
-                else if (n == "varphi")
-                    symbol = QChar(0x27);
-                else if (n == "chi")
-                    symbol = QChar(0xC2);
-                else if (n == "psi")
-                    symbol = QChar(0xC3);
-                else if (n == "omega")
-                    symbol = QChar(0x21);
-                // else if (n=="Omega") symbol=QChar(0x3A9);
-                else if (n == "Gamma")
-                    symbol = QChar(0xA1);
-                else if (n == "Delta")
-                    symbol = QChar(0xA2);
-                else if (n == "Theta")
-                    symbol = QChar(0xA3);
-                else if (n == "Lambda")
-                    symbol = QChar(0xA4);
-                else if (n == "Xi")
-                    symbol = QChar(0xA5);
-                else if (n == "Pi")
-                    symbol = QChar(0xA6);
-                else if (n == "Sigma")
-                    symbol = QChar(0xA7);
-                else if (n == "Upsilon")
-                    symbol = QChar(0xA8);
-                else if (n == "Phi")
-                    symbol = QChar(0xA9);
-                else if (n == "Psi")
-                    symbol = QChar(0xAA);
-                else if (n == "leftharpoonup") {
-                    symbol = QChar(0x28);
-                } else if (n == "rightharpoonup") {
-                    symbol = QChar(0x2A);
-                } else if (n == "leftharpoondown") {
-                    symbol = QChar(0x29);
-                } else if (n == "rightharpoondown") {
-                    symbol = QChar(0x2B);
-                } else if (n == "neg")
-                    symbol = QChar(0xAC);
-                else if (n == "star")
-                    symbol = QChar(0x3F);
+                if (JKQtMap::charFgreekMap.contains(n)) {
+                    symbol = JKQtMap::charFgreekMap.value(n);
+                }
                 else {
                     // now we set the symbols from the Symbol font
                     font = MTSFsymbol;
-                    if (n == "leftrightarrow")
-                        symbol = QChar(0x24);
-                    else if (n == "leftarrow")
-                        symbol = QChar(0xc3);
-                    else if (n == "rightarrow" || n == "to")
-                        symbol = QChar(0x21);
-                    else if (n == "uparrow")
-                        symbol = QChar(0x22);
-                    else if (n == "downarrow")
-                        symbol = QChar(0x23);
-                    else if (n == "updownarrow")
-                        symbol = QChar(0x6c);
-                    else if (n == "Leftrightarrow" || n == "iff")
-                        symbol = QChar(0x2c);
-                    else if (n == "Leftarrow")
-                        symbol = QChar(0x28);
-                    else if (n == "Rightarrow")
-                        symbol = QChar(0x29);
-                    else if (n == "Uparrow")
-                        symbol = QChar(0x2a);
-                    else if (n == "Downarrow")
-                        symbol = QChar(0x2b);
-                    else if (n == "Updownarrow")
-                        symbol = QChar(0x6d);
-
-                    else if (n == "pm")
-                        symbol = QChar(0xa7);
-                    else if (n == "mp")
-                        symbol = QChar(0xa8);
-                    else if (n == "leq")
-                        symbol = QChar(0xb7);
-                    else if (n == "geq")
-                        symbol = QChar(0xb8);
-
-                    else if (n == "ll")
-                        symbol = QChar(0xbf);
-                    else if (n == "gg")
-                        symbol = QChar(0xc0);
-                    // else if (n=="euro") symbol=QChar(0x20AC);
-                    else if (n == "Alef" || n == "alef")
-                        symbol = QChar(0x40);
-                    // else if (n=="Bet") symbol=QChar(0x2136);
-                    // else if (n=="Gimel") symbol=QChar(0x2137);
-                    // else if (n=="Dalet") symbol=QChar(0x2138);
-                    else if (n == "ni")
-                        symbol = QChar(0x33);
-                    else if (n == "circ")
-                        symbol = QChar(0xb1);
-
-                    else if (n == "tilde")
-                        symbol = QChar(0xbb);
-                    else if (n == "emptyset")
-                        symbol = QChar(0x3b);
-                    else if (n == "odot")
-                        symbol = QChar(0xaf);
-                    else if (n == "ominus")
-                        symbol = QChar(0xaa);
-                    else if (n == "odiv")
-                        symbol = QChar(0xae);
-                    else if (n == "oplus")
-                        symbol = QChar(0xa9);
-                    else if (n == "lceil")
-                        symbol = QChar(0x64);
-                    else if (n == "rceil")
-                        symbol = QChar(0x65);
-                    else if (n == "lfloor")
-                        symbol = QChar(0x62);
-                    else if (n == "rfloor")
-                        symbol = QChar(0x63);
-
-                    else if (n == "bot") {
-                        symbol = QChar(0x3f);
+                    if (JKQtMap::charFsyMap.contains(n)) {
+                        symbol = JKQtMap::charFsyMap.value(n);
                     } else if (n == "cdots") {
                         symbol = QString(3, QChar(0xA2));
                     } else if (n == "dots") {
                         symbol = "...";
                     }
-
-                    else if (n == "nwarrow") {
-                        symbol = QChar(0x2d);
-                    } else if (n == "nearrow") {
-                        symbol = QChar(0x25);
-                    } else if (n == "searrow") {
-                        symbol = QChar(0x26);
-                    } else if (n == "swarrow") {
-                        symbol = QChar(0x2e);
-                    }
-
                     else if (n == "div") {
                         symbol = QChar(0xa5);
                     }
-
-                    else if (n == "times")
-                        symbol = QChar(0xa3);
-                    else if (n == "propto")
-                        symbol = QChar(0x2f);
-                    else if (n == "bullet")
-                        symbol = QChar(0x2b);
-                    else if (n == "equiv")
-                        symbol = QChar(0xb4);
-                    else if (n == "approx")
-                        symbol = QChar(0xbc);
                     else if (n == "ellipsis")
                         symbol = "...";
-                    else if (n == "Im")
-                        symbol = QChar(0x3D);
-                    else if (n == "Re")
-                        symbol = QChar(0x3C);
-                    // else if (n=="otimes") symbol=QChar(0x2297);
-                    else if (n == "oplus")
-                        symbol = QChar(0xa9);
-                    else if (n == "oslash")
-                        symbol = QChar(0xae);
-                    else if (n == "cap" || n == "land")
-                        symbol = QChar(0x5c);
-                    else if (n == "cup" || n == "lor")
-                        symbol = QChar(0x5b);
-                    else if (n == "supset")
-                        symbol = QChar(0xbe);
-                    else if (n == "supseteq")
-                        symbol = QChar(0xb6);
-                    else if (n == "subset")
-                        symbol = QChar(0xbd);
-                    else if (n == "subseteq")
-                        symbol = QChar(0xb5);
-
-                    else if (n == "in")
-                        symbol = QChar(0x32);
-                    else if (n == "nabla")
-                        symbol = QChar(0x35);
-                    else if (n == "cdot")
-                        symbol = QChar(0xa2);
-                    else if (n == "wedge")
-                        symbol = QChar(0x5e);
-                    else if (n == "vee")
-                        symbol = QChar(0x5f);
-                    else if (n == "diamond")
-                        symbol = QChar(0xE0);
-                    else if (n == "langle")
-                        symbol = QChar(0x68);
-                    else if (n == "rangle")
-                        symbol = QChar(0x69);
                     else if (n == "int") {
                         symbol = QChar(0x73);
                         fontFactor = mathFontFactor;
                         yfactor = +0.1;
-                    } else if (n == "infty") {
-                        symbol = QChar(0x31);
-                    } else if (n == "forall") {
-                        symbol = QChar(0x38);
-                    } else if (n == "exists") {
-                        symbol = QChar(0x39);
-                    } else if (n == "cong") {
-                        symbol = QChar(0xbb);
-                    } else if (n == "bot") {
-                        symbol = QChar(0x3f);
                     }
 
                     else { // here are text mode symbols, i.e. bold and italic won't be touched
@@ -3999,330 +3313,15 @@ bool JKQTmathText::MTsymbolNode::toHtml(
     QString s;
     JKQTmathText::MTenvironment ev = currentEv;
 
-    if (symbolName == "sin") {
-        s = "sin";
-    } else if (symbolName == "cos") {
-        s = "cos";
-    } else if (symbolName == "tan") {
-        s = "tan";
-    } else if (symbolName == "sinh") {
-        s = "sinh";
-    } else if (symbolName == "cosh") {
-        s = "cosh";
-    } else if (symbolName == "tanh") {
-        s = "tanh";
-    } else if (symbolName == "atan") {
-        s = "atan";
-    } else if (symbolName == "acos") {
-        s = "acos";
-    } else if (symbolName == "asin") {
-        s = "asin";
-    } else if (symbolName == "arcsin") {
-        s = "arcsin";
-    } else if (symbolName == "arccos") {
-        s = "arccos";
-    } else if (symbolName == "arctan") {
-        s = "arctan";
-    } else if (symbolName == "ii") {
-        s = "i";
-    } else if (symbolName == "dd") {
-        s = "d";
-    } else if (symbolName == "exp") {
-        s = "exp";
-    } else if (symbolName == "log") {
-        s = "log";
-    } else if (symbolName == "ln") {
-        s = "ln";
-    } else if (symbolName == "ld") {
-        s = "ld";
-    } else if (symbolName == "lb") {
-        s = "lb";
-    } else if (symbolName == "erf") {
-        s = "erf";
-    } else if (symbolName == "min") {
-        s = "min";
-    } else if (symbolName == "max") {
-        s = "max";
-    } else if (symbolName == "argmin") {
-        s = "argmin";
-    } else if (symbolName == "argmax") {
-        s = "argmax";
-    } else if (symbolName == "inf") {
-        s = "inf";
-    } else if (symbolName == "sup") {
-        s = "sup";
-    } else if (symbolName == "liminf") {
-        s = "liminf";
-    } else if (symbolName == "limsup") {
-        s = "limsup";
-    } else if (symbolName == "lim") {
-        s = "lim";
-    } else if (symbolName == "max") {
-        s = "max";
-    } else if (symbolName == "min") {
-        s = "min";
-    } else if (symbolName == "sec") {
-        s = "sec";
-    } else if (symbolName == "gcd") {
-        s = "gcd";
-    } else if (symbolName == "hom") {
-        s = "hom";
-    } else if (symbolName == "ker") {
-        s = "ker";
-    } else if (symbolName == "dim") {
-        s = "dim";
-    } else if (symbolName == "cot") {
-        s = "cot";
-    } else if (symbolName == "arg") {
-        s = "arg";
-    } else if (symbolName == "det") {
-        s = "det";
-    } else if (symbolName == "deg") {
-        s = "deg";
-    } else if (symbolName == "Pr") {
-        s = "Pr";
-    } else if (symbolName == "coth") {
-        s = "coth";
-    } else if (symbolName == "alpha")
-        s = "&alpha;";
-    else if (symbolName == "beta")
-        s = "&beta;";
-    else if (symbolName == "gamma")
-        s = "&gamma;";
-    else if (symbolName == "delta")
-        s = "&delta;";
-    else if (symbolName == "epsilon")
-        s = "&epsilon;";
-    else if (symbolName == "varepsilon")
-        s = "&epsilon;";
-    else if (symbolName == "zeta")
-        s = "&zeta;";
-    else if (symbolName == "eta")
-        s = "&eta;";
-    else if (symbolName == "theta")
-        s = "&theta;";
-    else if (symbolName == "vartheta")
-        s = "&thetasym;";
-    else if (symbolName == "iota")
-        s = "&iota;";
-    else if (symbolName == "kappa")
-        s = "&kappa;";
-    else if (symbolName == "lambda")
-        s = "&lambda;";
-    else if (symbolName == "mu")
-        s = "&mu;";
-    else if (symbolName == "nu")
-        s = "&nu;";
-    else if (symbolName == "xi")
-        s = "&xi;";
-    else if (symbolName == "pi")
-        s = "&pi;";
-    else if (symbolName == "varpi")
-        s = "&piv;";
-    else if (symbolName == "rho")
-        s = "&rho;";
-    else if (symbolName == "sigma")
-        s = "&sigma;";
-    else if (symbolName == "varsigma")
-        s = "&sigmaf;";
-    else if (symbolName == "tau")
-        s = "&tau;";
-    else if (symbolName == "upsilon")
-        s = "&upsilon;";
-    else if (symbolName == "phi")
-        s = "&phi;";
-    else if (symbolName == "varphi")
-        s = "&phi;";
-    else if (symbolName == "chi")
-        s = "&chi;";
-    else if (symbolName == "psi")
-        s = "&psi;";
-    else if (symbolName == "omega")
-        s = "&omega;";
-    else if (symbolName == "Gamma")
-        s = "&Gamma;";
-    else if (symbolName == "Delta")
-        s = "&Delta;";
-    else if (symbolName == "Theta")
-        s = "&Theta;";
-    else if (symbolName == "Lambda")
-        s = "&Lambda;";
-    else if (symbolName == "Omega")
-        s = "&Omega;";
-    else if (symbolName == "Xi")
-        s = "&Xi;";
-    else if (symbolName == "Pi")
-        s = "&Pi;";
-    else if (symbolName == "Sigma")
-        s = "&Sigma;";
+    if (JKQtMap::strMathMap.contains(symbolName)) {
+        s = JKQtMap::strMathMap.value(symbolName);
+    }
     else if (symbolName == "sum") {
         ev.fontSize *= 1.7;
         s = "&sum;";
     } else if (symbolName == "prod") {
         ev.fontSize *= 1.7;
         s = "&prod;";
-    } else if (symbolName == "Upsilon")
-        s = "&Upsilon;";
-    else if (symbolName == "Phi")
-        s = "&Phi;";
-    else if (symbolName == "Psi")
-        s = "&Psi;";
-    else if (symbolName == "leftrightarrow")
-        s = "&harr;";
-    else if (symbolName == "leftarrow")
-        s = "&larr;";
-    else if (symbolName == "rightarrow" || symbolName == "to")
-        s = "&rarr;";
-    else if (symbolName == "uparrow")
-        s = "&uarr;";
-    else if (symbolName == "downarrow")
-        s = "&darr;";
-    else if (symbolName == "Leftrightarrow" || symbolName == "iff")
-        s = "&hArr;";
-    else if (symbolName == "Leftarrow")
-        s = "&lArr;";
-    else if (symbolName == "Rightarrow")
-        s = "&rArr;";
-    else if (symbolName == "Uparrow")
-        s = "&uArr;";
-    else if (symbolName == "Downarrow")
-        s = "&dArr;";
-    else if (symbolName == "pm")
-        s = "&plusmn;";
-    else if (symbolName == "leq")
-        s = "&le;";
-    else if (symbolName == "geq")
-        s = "&ge;";
-    else if (symbolName == "times")
-        s = "&times;";
-    else if (symbolName == "propto")
-        s = "&prop;";
-    else if (symbolName == "partial")
-        s = "&part;";
-    else if (symbolName == "bullet")
-        s = "&bull;";
-    else if (symbolName == "neq" || symbolName == "ne")
-        s = "&ne;";
-    else if (symbolName == "equiv")
-        s = "&equiv;";
-    else if (symbolName == "approx")
-        s = "&asymp;";
-    else if (symbolName == "ellipsis")
-        s = "...";
-    else if (symbolName == "Im")
-        s = "&image;";
-    else if (symbolName == "Re")
-        s = "&real;";
-    else if (symbolName == "otimes")
-        s = "&otimes;";
-    else if (symbolName == "oplus")
-        s = "&oplus;";
-    else if (symbolName == "oslash")
-        s = "/";
-    else if (symbolName == "cap" || symbolName == "land")
-        s = "&cap;";
-    else if (symbolName == "cup" || symbolName == "lor")
-        s = "&cup;";
-    else if (symbolName == "supset")
-        s = "&sup;";
-    else if (symbolName == "supseteq")
-        s = "&supe;";
-    else if (symbolName == "supsetnot")
-        s = "&nsup;";
-    else if (symbolName == "subset")
-        s = "&sub;";
-    else if (symbolName == "subseteq")
-        s = "&sube;";
-    else if (symbolName == "in")
-        s = "&isin;";
-    else if (symbolName == "notin")
-        s = "&notin;";
-    else if (symbolName == "angle")
-        s = "&ang;";
-    else if (symbolName == "nabla")
-        s = "&nabla;";
-    else if (symbolName == "copyright")
-        s = "&copy;";
-    else if (symbolName == "registered")
-        s = "&reg;";
-    else if (symbolName == "trademark")
-        s = "&trade;";
-    else if (symbolName == "cdot")
-        s = "&sdot;";
-    else if (symbolName == "neg")
-        s = "&not;";
-    else if (symbolName == "wedge")
-        s = "&and;";
-    else if (symbolName == "vee")
-        s = "&vee;";
-    else if (symbolName == "diamond")
-        s = "&loz;";
-    else if (symbolName == "langle")
-        s = "&lang;";
-    else if (symbolName == "rangle")
-        s = "&rang;";
-    else if (symbolName == "int") {
-        s = "&int;";
-    } else if (symbolName == "forall") {
-        s = "&forall;";
-    } else if (symbolName == "exists") {
-        s = "&exist;";
-    } else if (symbolName == "cong") {
-        s = "&sim;";
-    } else if (symbolName == "bot") {
-        s = "&perp;";
-    }
-
-    else if (symbolName == "ll") {
-        s = "<<";
-    } else if (symbolName == "gg") {
-        s = ">>";
-    } else if (symbolName == "bbC") {
-        s = "<b>C</b>";
-    } else if (symbolName == "bbH") {
-        s = "<b>H</b>";
-    } else if (symbolName == "bbN") {
-        s = "<b>N</b>";
-    } else if (symbolName == "bbP") {
-        s = "<b>P</b>";
-    } else if (symbolName == "bbQ") {
-        s = "<b>Q</b>";
-    } else if (symbolName == "bbR") {
-        s = "<b>R</b>";
-    } else if (symbolName == "bbZ") {
-        s = "<b>Z</b>";
-    } else if (symbolName == "Alef" || symbolName == "alef")
-        s = "&alefsym;";
-    else if (symbolName == "tilde")
-        s = "~";
-    else if (symbolName == "iint") {
-        s = "&int;&int;";
-    } else if (symbolName == "iiint") {
-        s = "&int;&int;&int;";
-    } else if (symbolName == "emptyset")
-        s = "&empty;";
-    else if (symbolName == "varnothing")
-        s = "&empty;";
-    else if (symbolName == "lceil")
-        s = "&lceil;";
-    else if (symbolName == "rceil")
-        s = "&rceil;";
-    else if (symbolName == "lfloor")
-        s = "&lfloor;";
-    else if (symbolName == "rfloor")
-        s = "&rfloor;";
-    else if (symbolName == "subsetnot")
-        s = "&nsub;";
-    else if (symbolName == "DC")
-        s = "=";
-    else if (symbolName == "cdots") {
-        s = "&sdot;&sdot;&sdot;";
-    } else if (symbolName == "dots") {
-        s = "...";
-    }
-
-    else if (symbolName == "cent") {
-        s = "&cent;";
     } else if (symbolName == "bigcap") {
         ev.fontSize *= 1.7;
         s = "&cap;";
@@ -4335,52 +3334,6 @@ bool JKQTmathText::MTsymbolNode::toHtml(
     } else if (symbolName == "bighat") {
         ev.fontSize *= 1.7;
         s = "&and;";
-    }
-
-    else if (symbolName == "_") {
-        s = "_";
-    } else if (symbolName == "}") {
-        s = "}";
-    } else if (symbolName == "{") {
-        s = "{";
-    } else if (symbolName == "hbar") {
-        s = "&#8463;";
-    } else if (symbolName == "euro") {
-        s = "&euro;";
-    } else if (symbolName == "pound") {
-        s = "&pound;";
-    } else if (symbolName == "yen") {
-        s = "&yen;";
-    } else if (symbolName == "div") {
-        s = "&divide;";
-    } else if (symbolName == "backslash") {
-        s = "\\";
-    } else if (symbolName == "$") {
-        s = "$";
-    } else if (symbolName == "%") {
-        s = "%";
-    } else if (symbolName == "&") {
-        s = "&";
-    } else if (symbolName == "#") {
-        s = "#";
-    } else if (symbolName == "ast") {
-        s = "*";
-    } else if (symbolName == "glq") {
-        s = "'";
-    } else if (symbolName == "grq") {
-        s = "'";
-    } else if (symbolName == "glqq") {
-        s = "\"";
-    } else if (symbolName == "grqq") {
-        s = "\"";
-    } else if (symbolName == "flq") {
-        s = "&lt;";
-    } else if (symbolName == "frq") {
-        s = "&gt;";
-    } else if (symbolName == "flqq") {
-        s = "";
-    } else if (symbolName == "frqq") {
-        s = "";
     } else
         ok = false;
 
@@ -4482,6 +3435,9 @@ JKQTmathText::JKQTmathText(QObject* parent)
     currentTokenID = 0;
     parseString = "";
     parsingMathEnvironment = false;
+
+    JKQtMap::InitMap();
+
 }
 
 JKQTmathText::~JKQTmathText()

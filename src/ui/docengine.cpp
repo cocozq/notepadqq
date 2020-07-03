@@ -14,7 +14,11 @@
 #include <QTextStream>
 
 #include <algorithm>
+#ifdef Q_OS_LINUX
 #include <uchardet.h>
+#else
+#include "include/uchardet.h"
+#endif
 
 DocEngine::DocEngine(TopEditorContainer *topEditorContainer, QObject *parent) :
     QObject(parent),

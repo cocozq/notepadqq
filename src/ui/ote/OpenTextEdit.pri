@@ -22,6 +22,7 @@ SOURCES += \
     $$PWD/plugins/bracketmatcherplugin.cpp
 
 HEADERS += \
+    $$PWD/JKQTMath/jkqtsymbl.h \
     $$PWD/textedit.h \
     $$PWD/texteditgutter.h \
     $$PWD/editorlabel.h \

@@ -39,10 +39,16 @@
 #include <cfloat>
 #include <QComboBox>
 #include <QPrinter>
+#ifdef Q_OS_WIN
+#include <io.h>
+#include <process.h>
+#define _USE_MATH_DEFINES
+#else
 #include <unistd.h>
+#include <dirent.h>
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
