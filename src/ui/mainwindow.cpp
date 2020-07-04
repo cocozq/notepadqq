@@ -43,6 +43,10 @@
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 
+#ifdef Q_OS_WIN
+#include "Windows.h"
+#endif
+
 QList<MainWindow*> MainWindow::m_instances = QList<MainWindow*>();
 
 MainWindow::MainWindow(const QString &workingDirectory, const QStringList &arguments, QWidget *parent) :
@@ -2188,20 +2192,50 @@ void MainWindow::runCommand()
     QString cmd = command;
     if (!url.isEmpty()) {
         cmd.replace("\%url\%", url.toString(QUrl::None));
-        cmd.replace("\%path\%", url.path(QUrl::FullyEncoded));
+//        cmd.replace("\%path\%", url.path(QUrl::FullyEncoded));
+        cmd.replace("\%path\%", url.toLocalFile().replace(" ","%20"));
         cmd.replace("\%filename\%", url.fileName(QUrl::FullyEncoded));
         cmd.replace("\%directory\%", QFileInfo(url.toLocalFile()).absolutePath());
+        cmd.replace("\%homepath\%", QDir::homePath());
     }
     const auto& selection = editor->selectedTexts();
-    if (!selection.first().isEmpty()) {
+    if (!selection.isEmpty() && !selection.first().isEmpty()) {
         cmd.replace("\%selection\%",selection.first());
     }
     QStringList args = NqqRun::RunDialog::parseCommandString(cmd);
     if (!args.isEmpty()) {
         cmd = args.takeFirst();
-        if(!QProcess::startDetached(cmd, args)) {
-
+#ifdef Q_OS_WIN
+        qDebug() << "exe command:" << cmd << endl;
+        if (command.contains("/shell")) {
+          void *was;
+          Wow64DisableWow64FsRedirection (&was);
+          ShellExecuteA(NULL, "open", cmd.toStdString().c_str(), NULL, NULL, SW_SHOWNORMAL);
+          Wow64RevertWow64FsRedirection (was);
         }
+        else {
+          QProcess p;
+          //        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+          //        p.setProcessEnvironment(env);
+          p.setProgram(cmd);
+          p.setCreateProcessArgumentsModifier([] ( QProcess::CreateProcessArguments *args) {
+            //              args->flags &= ~CREATE_NO_WINDOW;
+            args->flags |= CREATE_NEW_CONSOLE;
+            args->startupInfo->dwFlags &= ~STARTF_USESTDHANDLES;
+            args->startupInfo->dwFlags |= STARTF_USEFILLATTRIBUTE;
+            args->startupInfo->dwFillAttribute = (FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN)
+                                                 | FOREGROUND_INTENSITY;
+          });
+
+          p.setArguments(args);
+          qDebug() << "exe command args:" << args << endl;
+          p.startDetached();
+        }
+#else
+        if(!QProcess::startDetached(cmd, args)) {
+          qWarning() << "Not startDetached.";
+        }
+#endif
     }
 }
 
