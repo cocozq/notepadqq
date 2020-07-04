@@ -5,39 +5,22 @@
 
 class JKQtMap {
 public:
-  static void InitMap();
-  static QString getWinMap(QString key);
-  static QChar getWinChar(QString key);
+  void InitMap();
 
-  static QMap<QString, QChar> charWinMap;
-  static QMap<QString, QString> strWinMap;
+  QMap<QString, QChar> charWinMap;
+  QMap<QString, QString> strWinMap;
 
-  static QMap<QString, QChar> charUniMap;
-  static QMap<QString, QChar> charFgreekMap;
-  static QMap<QString, QChar> charFsyMap;
+  QMap<QString, QChar> charUniMap;
+  QMap<QString, QChar> charFgreekMap;
+  QMap<QString, QChar> charFsyMap;
 
-  static QMap<QString, QString> strMathMap;
+  QMap<QString, QString> strMathMap;
 
-private:
-  static bool isInit;
 };
 
-QString JKQtMap::getWinMap(QString key) {
-  if (strWinMap.contains(key))
-    return strWinMap.value(key);
-  return nullptr;
-}
-
-QChar JKQtMap::getWinChar(QString key) {
-  if (charWinMap.contains(key))
-    return charWinMap.value(key);
-  return QChar(0);
-}
 
 void JKQtMap::InitMap() {
-  if (isInit)
-    return;
-  isInit = true;
+
   charWinMap.insert("leftrightarrow", QChar(0xAB));
   charWinMap.insert("leftarrow", QChar(0xAC));
   charWinMap.insert("rightarrow", QChar(0xAE));

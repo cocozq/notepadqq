@@ -2618,11 +2618,11 @@ JKQTmathText::MTsymbolNode::MTsymbolNode(JKQTmathText* parent, QString name, boo
                 // now we set the symbols from the Symbol font
                 font = MTSFsymbol;
 
-                if (JKQtMap::charWinMap.contains(n)) {
-                    symbol = JKQtMap::charWinMap.value(n);
+                if (this->parent->jkQtMap->charWinMap.contains(n)) {
+                    symbol = this->parent->jkQtMap->charWinMap.value(n);
                 }
-                else if (JKQtMap::strWinMap.contains(n)) {
-                    symbol = JKQtMap::strWinMap.value(n);
+                else if (this->parent->jkQtMap->strWinMap.contains(n)) {
+                    symbol = this->parent->jkQtMap->strWinMap.value(n);
                 }
 
                 if (n.startsWith("bb", Qt::CaseSensitive)) {
@@ -2825,8 +2825,8 @@ JKQTmathText::MTsymbolNode::MTsymbolNode(JKQTmathText* parent, QString name, boo
             else {
                 // now we set the symbols from the Symbol font
                 font = MTSFsymbol;
-                if (JKQtMap::charUniMap.contains(n)) {
-                    symbol = JKQtMap::charUniMap.value(n);
+                if (this->parent->jkQtMap->charUniMap.contains(n)) {
+                    symbol = this->parent->jkQtMap->charUniMap.value(n);
                 }
 
                 if (n == "sum" || n == "prod") {
@@ -2955,14 +2955,14 @@ JKQTmathText::MTsymbolNode::MTsymbolNode(JKQTmathText* parent, QString name, boo
             // else if (n=="frqq") { symbol=""; }
             else {
                 font = MTSFgreek;
-                if (JKQtMap::charFgreekMap.contains(n)) {
-                    symbol = JKQtMap::charFgreekMap.value(n);
+                if (this->parent->jkQtMap->charFgreekMap.contains(n)) {
+                    symbol = this->parent->jkQtMap->charFgreekMap.value(n);
                 }
                 else {
                     // now we set the symbols from the Symbol font
                     font = MTSFsymbol;
-                    if (JKQtMap::charFsyMap.contains(n)) {
-                        symbol = JKQtMap::charFsyMap.value(n);
+                    if (this->parent->jkQtMap->charFsyMap.contains(n)) {
+                        symbol = this->parent->jkQtMap->charFsyMap.value(n);
                     } else if (n == "cdots") {
                         symbol = QString(3, QChar(0xA2));
                     } else if (n == "dots") {
@@ -3313,8 +3313,8 @@ bool JKQTmathText::MTsymbolNode::toHtml(
     QString s;
     JKQTmathText::MTenvironment ev = currentEv;
 
-    if (JKQtMap::strMathMap.contains(symbolName)) {
-        s = JKQtMap::strMathMap.value(symbolName);
+    if (this->parent->jkQtMap->strMathMap.contains(symbolName)) {
+        s = this->parent->jkQtMap->strMathMap.value(symbolName);
     }
     else if (symbolName == "sum") {
         ev.fontSize *= 1.7;
@@ -3436,7 +3436,8 @@ JKQTmathText::JKQTmathText(QObject* parent)
     parseString = "";
     parsingMathEnvironment = false;
 
-    JKQtMap::InitMap();
+    jkQtMap = new JKQtMap();
+    jkQtMap->InitMap();
 
 }
 

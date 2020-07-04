@@ -135,6 +135,9 @@
     \include test/jkqtmathtext_test/jkqtmathtext_test.pro
 
  */
+
+class JKQtMap;
+
 class LIB_EXPORT JKQTmathText : public QObject {
         Q_OBJECT
     public:
@@ -673,6 +676,8 @@ class LIB_EXPORT JKQTmathText : public QObject {
         QString parseString;
         /** \brief used by the parser. indicates whether we are in a math environment */
         bool parsingMathEnvironment;
+
+        JKQtMap* jkQtMap;
 
 
     public:
