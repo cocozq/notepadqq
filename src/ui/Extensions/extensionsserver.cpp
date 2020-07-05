@@ -65,11 +65,13 @@ namespace Extensions {
             return;
 
         while (1) {
+            qDebug() << "on client message waiting..." << endl;
             QString jsonRequest = stream.readLine();
             if (jsonRequest.isNull())
                 break;
 
             QJsonDocument request = QJsonDocument::fromJson(jsonRequest.toUtf8());
+            qDebug() << "on client message request..." << jsonRequest << endl;
 
             QJsonObject response = m_extensionsRTS->handleRequest(request.object());
             QString jsonResponse = QString(
@@ -77,6 +79,8 @@ namespace Extensions {
                     .trimmed();
 
             stream << jsonResponse << "\n";
+
+             qDebug() << "on client message response..." << jsonResponse << endl;
         }
     }
 
