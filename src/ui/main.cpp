@@ -24,7 +24,7 @@
 #else
 #include <io.h>
 #include <process.h>
-#endif/ For getuid
+#endif // For getuid
 
 #ifdef QT_DEBUG
 #include <QElapsedTimer>

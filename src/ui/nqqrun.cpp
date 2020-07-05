@@ -420,7 +420,7 @@ QStringList RunDialog::parseCommandString(QString cmd) {
         }
     }
     if (curr.length() > 0) {
-        parts.append(curr.replace("%20", " "));
+        parts.append(curr.replace("%20", " "));//rollback space
     }
 
     return parts;
