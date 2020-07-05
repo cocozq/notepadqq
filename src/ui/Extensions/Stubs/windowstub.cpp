@@ -25,7 +25,8 @@ namespace Extensions {
                         new EditorStub(window->currentEditorSharedPtr().toWeakRef(), rts));
             qint32 stubId = rts->presentObject(stub);
 
-            return StubReturnValue(rts->getJSONStub(stubId, stub->stubName_()));
+            StubReturnValue res = StubReturnValue(rts->getJSONStub(stubId, stub->stubName_()));
+            return res;
         }
 
         NQQ_DEFINE_EXTENSION_METHOD(WindowStub, addExtensionMenuItem, args)

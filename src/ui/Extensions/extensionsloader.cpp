@@ -6,6 +6,12 @@
 #include <QDateTime>
 #include <QDirIterator>
 
+#ifdef Q_OS_WIN
+#include "Windows.h"
+#else
+#include <sys/stat.h>
+#endif
+
 namespace Extensions {
 
     QSharedPointer<ExtensionsServer> ExtensionsLoader::m_extensionsServer;
@@ -56,6 +62,7 @@ namespace Extensions {
             if (!fileName.endsWith("%%BACKUP", Qt::CaseInsensitive)) {
                 QSharedPointer<Extension> ext = QSharedPointer<Extension>(
                         new Extension(fileName, m_extensionsServer->socketPath()));
+                Sleep(2000);
                 m_extensions.insert(ext->id(), ext);
             }
         }

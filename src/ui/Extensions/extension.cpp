@@ -9,6 +9,10 @@
 #include <QTextStream>
 #include <QTime>
 
+#ifdef Q_OS_WIN
+#include "Windows.h"
+#endif
+
 namespace Extensions {
 
     Extension::Extension(QString path, QString serverSocketPath) : QObject(0)
@@ -40,9 +44,19 @@ namespace Extensions {
                 args << serverSocketPath;
                 args << m_extensionId;
 
+                qDebug() << "extension args:" << args << endl;
                 QString runtimePath = Notepadqq::nodejsPath();
+                qDebug() << args[2] << args[3] << endl;
 
                 connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(on_processError(QProcess::ProcessError)));
+
+                #ifdef Q_OS_WIN
+                process->setCreateProcessArgumentsModifier([] ( QProcess::CreateProcessArguments *args) {
+//                  args->flags |= CREATE_NO_WINDOW;
+                    args->startupInfo->wShowWindow = SW_HIDE;
+                    args->startupInfo->dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+                });
+                #endif
 
                 process->start(runtimePath, args);
 
@@ -95,6 +109,7 @@ namespace Extensions {
 
     void Extension::on_processError(QProcess::ProcessError error)
     {
+        qDebug() << error << endl;
         if (error == QProcess::FailedToStart) {
             failedToLoadExtension(m_name, tr("failed to start. Check your runtime: %1").arg(m_runtime));
         } else if (error == QProcess::Crashed) {
