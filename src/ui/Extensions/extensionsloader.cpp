@@ -62,7 +62,9 @@ namespace Extensions {
             if (!fileName.endsWith("%%BACKUP", Qt::CaseInsensitive)) {
                 QSharedPointer<Extension> ext = QSharedPointer<Extension>(
                         new Extension(fileName, m_extensionsServer->socketPath()));
+#ifdef Q_OS_WIN
                 Sleep(2000);
+#endif
                 m_extensions.insert(ext->id(), ext);
             }
         }
