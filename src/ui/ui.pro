@@ -239,7 +239,7 @@ translationsTarget.commands = ($${LRELEASE} \"$${CURRFILE}\")
 
 unix: {
     QMAKE_EXTRA_TARGETS += editorTarget extensionToolsTarget
-    PRE_TARGETDEPS += make_editor make_extensionTools
+    PRE_TARGETDEPS +=  make_extensionTools
 }
 
 win32: CONFIG(release, debug|release): QMAKE_LFLAGS += /NODEFAULTLIB:MSVCRTD
