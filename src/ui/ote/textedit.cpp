@@ -692,17 +692,29 @@ void TextEdit::deleteSelectedBlocks()
     ce.endEditBlock();
 }
 
-void TextEdit::setPlainText(const QString &text)
+void TextEdit::setPlainText(const QString &text, bool undo)
 {
     // setPlainText triggers a lot of QTextDocument::contentsChange, each of which will trigger the
     // SyntaxHighlighter. That means the entire document will be highlighted immediately, causing quite some
     // delays initially.
-    m_highlighter->setEnabled(false);
-    QPlainTextEdit::setPlainText(text);
-    m_highlighter->setEnabled(true);
+    if (undo) {
+        QString oldValue = this->toPlainText();
+        auto cc = textCursor();
+        cc.beginEditBlock();
+        cc.setPosition(0);
+        cc.setPosition(oldValue.length(), QTextCursor::KeepAnchor);
+        cc.removeSelectedText();
+        cc.insertText(text);
+        cc.endEditBlock();
+    } else {
+        m_highlighter->setEnabled(false);
+        QPlainTextEdit::setPlainText(text);
+        m_highlighter->setEnabled(true);
 
-    m_initialRevision = document()->revision();
-    m_lastSavedRevision = m_initialRevision;
+        m_initialRevision = document()->revision();
+        m_lastSavedRevision = m_initialRevision;
+    }
+
 }
 
 // pair.first = number of ws characters found, pair.second = number of spaces needed

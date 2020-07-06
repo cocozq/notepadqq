@@ -72,6 +72,7 @@ INSTALLFILESDIR = ../../support_files
 CURRFILE = $$PWD/ui.pro
 
 include(ote/OpenTextEdit.pri)
+include(libs/qtpromise/qtpromise.pri)
 
 SOURCES += main.cpp\
     mainwindow.cpp \

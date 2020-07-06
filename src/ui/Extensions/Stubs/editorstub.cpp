@@ -1,4 +1,5 @@
 #include "include/Extensions/Stubs/editorstub.h"
+#include "ote/textedit.h"
 
 namespace Extensions {
     namespace Stubs {
@@ -25,7 +26,8 @@ namespace Extensions {
 
             Q_ASSERT(args.count() >= 1);
 
-            editor()->setValue(convertToString(args.at(0)));
+            editor()->setValue(convertToString(args.at(0)), true);
+
             return StubReturnValue();
         }
 

@@ -249,9 +249,9 @@ namespace EditorNS
         m_textEditor->setSmartIndent(enabled);
     }
 
-    void Editor::setValue(const QString& value)
+    void Editor::setValue(const QString& value, bool undo)
     {        
-        m_textEditor->setPlainText(value);
+        m_textEditor->setPlainText(value, undo);
     }
 
     QString Editor::value()
