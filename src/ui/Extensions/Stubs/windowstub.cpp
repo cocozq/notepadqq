@@ -4,6 +4,10 @@
 #include "include/Extensions/Stubs/menuitemstub.h"
 #include "include/Extensions/runtimesupport.h"
 
+#ifdef Q_OS_WIN
+#include "Windows.h"
+#endif
+
 namespace Extensions {
     namespace Stubs {
 
@@ -40,6 +44,9 @@ namespace Extensions {
             Q_ASSERT(args.count() >= 2);
             QAction *menuItem = window->addExtensionMenuItem(args.at(0).toString(), convertToString(args.at(1)));
 
+#ifdef Q_OS_WIN
+            Sleep(2000);
+#endif
             QSharedPointer<Stub> stub = QSharedPointer<Stub>(
                         new MenuItemStub(menuItem, rts));
             qint32 stubId = rts->presentObject(stub);
