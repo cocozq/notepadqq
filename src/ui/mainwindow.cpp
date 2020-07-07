@@ -2229,7 +2229,7 @@ void MainWindow::runCommand()
 
           p.setArguments(args);
           qDebug() << "exe command args:" << args << endl;
-          p.startDetached();
+          p.start();
         }
 #else
         if(!QProcess::startDetached(cmd, args)) {
