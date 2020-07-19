@@ -72,7 +72,7 @@ INSTALLFILESDIR = ../../support_files
 CURRFILE = $$PWD/ui.pro
 
 include(ote/OpenTextEdit.pri)
-include(libs/qtpromise/qtpromise.pri)
+include(qtpromise/qtpromise.pri)
 
 SOURCES += main.cpp\
     mainwindow.cpp \
@@ -243,7 +243,7 @@ unix: {
     PRE_TARGETDEPS +=  make_extensionTools
 }
 
-win32: CONFIG(release, debug|release): QMAKE_LFLAGS += /NODEFAULTLIB:MSVCRTD
+#win32: CONFIG(release, debug|release): QMAKE_LFLAGS += /NODEFAULTLIB:MSVCRTD
 #win32: CONFIG(release, debug|release): LIBS += -L$$PWD/../LIBRARYNAME/Lib/ -lLIBRARY /NODEFAULTLIB:library
 
 #win32: QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
@@ -264,10 +264,10 @@ win32:contains(QMAKE_HOST.arch, x86_64) {
 } else {
     message("windows...uchardet...x86")
     CONFIG(debug, debug|release) {
-        win32: LIBS += -L$$PWD/../../libs/x86/ -luchardet
+        win32: LIBS += -L$$PWD/../../libs/x86/debug/ -luchardet
         win32: win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/x86/debug/libuchardet.a
     } else {
-        win32: LIBS += -L$$PWD/../../libs/x86/ -luchardet
+        win32: LIBS += -L$$PWD/../../libs/x86/release/ -luchardet
         win32: win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/x86/release/libuchardet.a
     }
 }
