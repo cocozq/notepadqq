@@ -2191,12 +2191,23 @@ void MainWindow::runCommand()
 
     QString cmd = command;
     if (!url.isEmpty()) {
+        QString path = url.toLocalFile().replace(" ","%20");
+        QString dirPath =  QFileInfo(url.toLocalFile()).absolutePath();
+        QString homePath = QDir::homePath();
+
+#ifdef Q_OS_WIN
+        dirPath = dirPath.replace("/", "\\\\");
+        path = path.replace("/", "\\\\");
+        homePath = homePath.replace("/", "\\\\");
+#endif
+
         cmd.replace("\%url\%", url.toString(QUrl::None));
 //        cmd.replace("\%path\%", url.path(QUrl::FullyEncoded));
-        cmd.replace("\%path\%", url.toLocalFile().replace(" ","%20"));
+
+        cmd.replace("\%path\%", path);
         cmd.replace("\%filename\%", url.fileName(QUrl::FullyEncoded));
-        cmd.replace("\%directory\%", QFileInfo(url.toLocalFile()).absolutePath());
-        cmd.replace("\%homepath\%", QDir::homePath());
+        cmd.replace("\%directory\%", dirPath);
+        cmd.replace("\%homepath\%", homePath);
     }
     const auto& selection = editor->selectedTexts();
     if (!selection.isEmpty() && !selection.first().isEmpty()) {
@@ -2229,7 +2240,8 @@ void MainWindow::runCommand()
 
           p.setArguments(args);
           qDebug() << "exe command args:" << args << endl;
-          p.start();
+//          p.start();
+          p.startDetached();
         }
 #else
         if(!QProcess::startDetached(cmd, args)) {
